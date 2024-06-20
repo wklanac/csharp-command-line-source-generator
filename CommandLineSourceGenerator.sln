@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineGenerator.Core", "CommandLineGenerator.Core\CommandLineGenerator.Core.csproj", "{780C8E34-98CF-4A79-8382-2633269726CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSkeleton", "ConsoleSkeleton\ConsoleSkeleton.csproj", "{A4BAC136-22B4-4D8A-B268-BAABF0E740BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineGenerator.Test", "CommandLineGenerator.Test\CommandLineGenerator.Test.csproj", "{3E0CC5B1-64EA-42BD-B219-6BA86ADB3AD6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{780C8E34-98CF-4A79-8382-2633269726CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{780C8E34-98CF-4A79-8382-2633269726CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{780C8E34-98CF-4A79-8382-2633269726CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{780C8E34-98CF-4A79-8382-2633269726CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4BAC136-22B4-4D8A-B268-BAABF0E740BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4BAC136-22B4-4D8A-B268-BAABF0E740BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4BAC136-22B4-4D8A-B268-BAABF0E740BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4BAC136-22B4-4D8A-B268-BAABF0E740BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E0CC5B1-64EA-42BD-B219-6BA86ADB3AD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E0CC5B1-64EA-42BD-B219-6BA86ADB3AD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E0CC5B1-64EA-42BD-B219-6BA86ADB3AD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E0CC5B1-64EA-42BD-B219-6BA86ADB3AD6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
