@@ -25,8 +25,9 @@ public class CommandLineSourceGenerator : ISourceGenerator
         {
             throw new ArgumentException("Cannot find a 'commands.json' file to use in the source generator context.");
         }
-        var config = JsonConvert.DeserializeObject<RootCommandConfigNode>(configText.ToString(),
-             new ArgumentArityReadonlyConverter());
+
+        var config = JsonConvert.DeserializeObject<RootCommandConfigNode>(configText.ToString());
+             
         if (config == null)
         {
             throw new Exception("Unknown error occurred during command configuration deserialization.");
