@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using CommandLineGenerator.ComponentGenerator.Static;
 using CommandLineGenerator.ComponentGenerator.Static.Model;
-using CommandLineGenerator.Json;
 using CommandLineGenerator.SourceWriter;
 using Newtonsoft.Json;
 
@@ -47,6 +46,7 @@ public class CommandLineSourceGenerator : ISourceGenerator
         sourceWriter.WriteLine($"namespace {likelyProgramTypeNamespace};");
         sourceWriter.WriteLine("");
         sourceWriter.WriteLine("using System.CommandLine;");
+        sourceWriter.WriteLine("using System.Threading.Tasks;");
         sourceWriter.WriteLine("");
         sourceWriter.OpenBlock("public partial class Program");
         sourceWriter.OpenBlock("public async static Task<int> InvokeFrontend(string[] args)");

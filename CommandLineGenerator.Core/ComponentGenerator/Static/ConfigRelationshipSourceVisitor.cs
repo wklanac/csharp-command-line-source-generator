@@ -7,25 +7,24 @@ public class ConfigRelationshipSourceVisitor(ISourceWriter sourceWriter): IConfi
 {
     public void Visit(CommandSubcommandRelationship commandSubcommandRelationship)
     {
-        var parentName = commandSubcommandRelationship.Parent.Name;
-        var childName = commandSubcommandRelationship.Child.Name;
-        var relationshipSource = $"{parentName}Command.AddCommand({childName}Command);";
-        sourceWriter.WriteLine(relationshipSource);
+        AddCommandChild("Command", commandSubcommandRelationship);
     }
 
     public void Visit(CommandOptionRelationship commandOptionRelationship)
     {
-        var parentName = commandOptionRelationship.Parent.Name;
-        var childName = commandOptionRelationship.Child.Name;
-        var relationshipSource = $"{parentName}Command.AddOption({childName}Option);";
-        sourceWriter.WriteLine(relationshipSource);
+        AddCommandChild("Option", commandOptionRelationship);
     }
 
     public void Visit(CommandArgumentRelationship commandArgumentRelationship)
     {
+        AddCommandChild("Argument", commandArgumentRelationship);
+    }
+
+    private void AddCommandChild(string childTypeName, ICommandLineConfigRelationship commandArgumentRelationship)
+    {
         var parentName = commandArgumentRelationship.Parent.Name;
         var childName = commandArgumentRelationship.Child.Name;
-        var relationshipSource = $"{parentName}Command.AddArgument({childName}Argument);";
+        var relationshipSource = $"{parentName}Command.Add{childTypeName}({childName}{childTypeName});";
         sourceWriter.WriteLine(relationshipSource);
     }
 }

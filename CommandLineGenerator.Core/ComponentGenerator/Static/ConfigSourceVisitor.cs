@@ -1,4 +1,6 @@
+using System.CommandLine;
 using CommandLineGenerator.ComponentGenerator.Static.Model;
+using CommandLineGenerator.Extensions;
 using CommandLineGenerator.SourceWriter;
 
 namespace CommandLineGenerator.ComponentGenerator.Static;
@@ -28,10 +30,12 @@ public class ConfigSourceVisitor(ISourceWriter sourceWriter): IConfigVisitor
         sourceWriter.WriteLine($"description: \"{optionConfigNode.Description}\"");
         sourceWriter.Unindent();
         sourceWriter.WriteLine(");");
-        sourceWriter.WriteLine($"{optionConfigNode.Name}Option.Arity = {optionConfigNode.OptionArity};");
-        sourceWriter.WriteLine($"{optionConfigNode.Name}Option.IsRequired = {optionConfigNode.IsRequired};");
+        sourceWriter.WriteLine(
+            $"{optionConfigNode.Name}Option.Arity = new {ArgumentArityConstructor(optionConfigNode.OptionArity)};");
+        sourceWriter.WriteLine(
+            $"{optionConfigNode.Name}Option.IsRequired = {optionConfigNode.IsRequired.ToLiteral()};");
         sourceWriter.WriteLine($"{optionConfigNode.Name}Option.AllowMultipleArgumentsPerToken = "
-                               + $"{optionConfigNode.AllowMultipleArgumentsPerToken};");
+                               + $"{optionConfigNode.AllowMultipleArgumentsPerToken.ToLiteral()};");
     }
 
     public void Visit(ArgumentConfigNode argumentConfigNode)
@@ -42,10 +46,17 @@ public class ConfigSourceVisitor(ISourceWriter sourceWriter): IConfigVisitor
         sourceWriter.WriteLine($"description: \"{argumentConfigNode.Description}\"");
         sourceWriter.Unindent();
         sourceWriter.WriteLine(");");
-        sourceWriter.WriteLine($"{argumentConfigNode.Name}Argument.Arity = new ArgumentArity({argumentConfigNode.Arity.MinimumNumberOfValues},{argumentConfigNode.Arity.MaximumNumberOfValues});");
+        sourceWriter.WriteLine(
+            $"{argumentConfigNode.Name}Argument.Arity = new {ArgumentArityConstructor(argumentConfigNode.Arity)};");
         if (argumentConfigNode.DefaultValue != null)
         {
-            sourceWriter.WriteLine($"{argumentConfigNode.Name}Argument.SetDefaultValue({argumentConfigNode.DefaultValue});");
+            sourceWriter.WriteLine(
+                $"{argumentConfigNode.Name}Argument.SetDefaultValue({argumentConfigNode.DefaultValue.ToLiteral()});");
         }
+    }
+
+    private static string ArgumentArityConstructor(ArgumentArity argumentArity)
+    {
+        return $"ArgumentArity({argumentArity.MinimumNumberOfValues}, {argumentArity.MaximumNumberOfValues})";
     }
 }

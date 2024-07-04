@@ -1,6 +1,6 @@
 namespace CommandLineGenerator.ComponentGenerator.Static.Model;
 
-public static class NodeExtensionMethods
+public static class NodeExtensions
 {
     public static bool IsLeaf(this INode node)
     {

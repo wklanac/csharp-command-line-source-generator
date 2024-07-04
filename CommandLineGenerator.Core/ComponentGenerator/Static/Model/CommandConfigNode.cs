@@ -9,9 +9,9 @@ namespace CommandLineGenerator.ComponentGenerator.Static.Model;
 public record CommandConfigNode(
     string Name,
     string Description,
-    List<ArgumentConfigNode>? Arguments,
-    List<OptionConfigNode>? Options,
-    List<CommandConfigNode>? SubCommands)
+    List<ArgumentConfigNode>? Arguments = null,
+    List<OptionConfigNode>? Options = null,
+    List<CommandConfigNode>? SubCommands = null)
 : ICommandLineConfigNode, IChildConfig<CommandConfigNode>
 {
     public string Name { get; } = Name;

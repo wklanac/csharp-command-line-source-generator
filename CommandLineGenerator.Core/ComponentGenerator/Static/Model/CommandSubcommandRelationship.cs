@@ -1,10 +1,15 @@
 namespace CommandLineGenerator.ComponentGenerator.Static.Model;
 
-public record CommandSubcommandRelationship(CommandConfigNode Parent, CommandConfigNode Child)
-    : ICommandLineConfigRelationship
+public record CommandSubcommandRelationship : ICommandLineConfigRelationship
 {
-    public CommandConfigNode Parent { get; } = Parent;
-    public CommandConfigNode Child { get; } = Child;
+    public CommandSubcommandRelationship(CommandConfigNode Parent, CommandConfigNode Child)
+    {
+        this.Parent = Parent;
+        this.Child = Child;
+    }
+    
+    public ICommandLineConfig Parent { get; }
+    public ICommandLineConfig Child { get; }
 
     public void Accept(IConfigRelationshipVisitor configRelationshipVisitor)
     {

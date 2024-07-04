@@ -1,0 +1,20 @@
+{
+    "Description": "File command line tool",
+    "SubCommands": [
+        {
+            "Name": "cat",
+            "Description": "Sequential file read",
+            "Arguments": [
+                {
+                    "Name": "filePath",
+                    "Description": "File path to perform a sequential read on",
+                    "TypeName": "string",
+                    "Arity": {
+                        "minimumNumberOfValues": 1,
+                        "maximumNumberOfValues": 1
+                    }
+                }
+            ]
+        }
+    ]
+ }

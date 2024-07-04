@@ -12,9 +12,14 @@ public class DefaultSourceWriter(DefaultSourceWriterSettings defaultSourceWriter
     public void OpenBlock(string openingString)
     {
         var openingStringLine = openingString +
-                                (defaultSourceWriterSettings.NewlineBeforeBlock ? '\n': "") +
-                                '{';
+                                (defaultSourceWriterSettings.NewlineBeforeBlock ? "" : '{');
         WriteLine(openingStringLine);
+
+        if (defaultSourceWriterSettings.NewlineBeforeBlock)
+        {
+            WriteLine('{'.ToString());
+        }
+        
         Indent();
     }
 

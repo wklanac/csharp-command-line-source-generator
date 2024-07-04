@@ -8,6 +8,7 @@ public class CommandHandlerWriter(ISourceWriter sourceWriter)
     public void AddHandler(CommandConfigNode commandConfigNode)
     {
         sourceWriter.WriteLine($"{commandConfigNode.Name}Command.SetHandler(");
+        sourceWriter.Indent();
         
         var optionNames = commandConfigNode.Options.Select(o => o.Name).ToList();
         var argumentNames = commandConfigNode.Arguments.Select(a => a.Name).ToList();
@@ -20,6 +21,8 @@ public class CommandHandlerWriter(ISourceWriter sourceWriter)
         var handlerString = $"({allInputNames}) => {commandConfigNode.Name}({allInputNames}), {allInputSymbols}";
         
         sourceWriter.WriteLine(handlerString);
+        
+        sourceWriter.Unindent();
         sourceWriter.WriteLine(");");
     }
 }
