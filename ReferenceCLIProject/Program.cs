@@ -11,7 +11,7 @@ public partial class Program
 
     public static void cat(string filePath)
     {
-        var commandProcess = Process.Start($"cat {filePath}");
+        var commandProcess = Process.Start("cat", filePath);
         commandProcess.WaitForExit();
     }
 }
