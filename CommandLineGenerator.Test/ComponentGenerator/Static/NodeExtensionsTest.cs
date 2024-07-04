@@ -1,3 +1,4 @@
+using CommandLineGenerator.ComponentGenerator.Static;
 using CommandLineGenerator.ComponentGenerator.Static.Model;
 using Moq;
 
@@ -10,11 +11,8 @@ public class NodeExtensionsTest
     public bool TestIsLeaf(int mockedChildCount)
     {
         var mockChildList = new List<Mock<INode>>();
-        for (var childIndex = 0; childIndex < mockedChildCount; childIndex++)
-        {
-            mockChildList.Add(new Mock<INode>());
-        }
-        
+        for (var childIndex = 0; childIndex < mockedChildCount; childIndex++) mockChildList.Add(new Mock<INode>());
+
         var mockNode = new Mock<INode>();
         mockNode.Setup(node => node.GetChildren()).Returns(mockChildList.Select(mc => mc.Object));
 

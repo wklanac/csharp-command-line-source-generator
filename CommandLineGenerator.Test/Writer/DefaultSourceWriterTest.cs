@@ -1,4 +1,4 @@
-using CommandLineGenerator.SourceWriter;
+using CommandLineGenerator.Writer;
 
 namespace CommandLineGenerator.Testing.Writer;
 
@@ -8,18 +8,18 @@ public class DefaultSourceWriterTest
         ExpectedResult = """
                          BlockStart()
                          {
-                         
+
                          """)]
     [TestCase(true, 4, false,
         ExpectedResult = """
                          BlockStart(){
-                         
+
                          """)]
     public string TestOpenBlock(bool useSpacesForTabs, int? spacesPerTab, bool newlineBeforeBlock)
     {
         var defaultSourceWriter = new DefaultSourceWriter(
             new DefaultSourceWriterSettings(useSpacesForTabs, spacesPerTab, newlineBeforeBlock));
-        
+
         defaultSourceWriter.OpenBlock("BlockStart()");
         return defaultSourceWriter.ToString();
     }
@@ -29,9 +29,9 @@ public class DefaultSourceWriterTest
     public string TestIndent(bool useSpacesForTabs, int? spacesPerTab)
     {
         var defaultSourceWriter = new DefaultSourceWriter(new DefaultSourceWriterSettings(
-            UseSpacesForTabs: useSpacesForTabs,
-            SpacesPerTab: spacesPerTab));
-        
+            useSpacesForTabs,
+            spacesPerTab));
+
         defaultSourceWriter.Indent();
         defaultSourceWriter.WriteLine("");
 
@@ -42,12 +42,12 @@ public class DefaultSourceWriterTest
     public void TestUnindent()
     {
         var defaultSourceWriter = new DefaultSourceWriter(new DefaultSourceWriterSettings(
-            UseSpacesForTabs: false, NewlineBeforeBlock: true));
+            false, NewlineBeforeBlock: true));
         defaultSourceWriter.Indent();
         defaultSourceWriter.Indent();
         defaultSourceWriter.Unindent();
         defaultSourceWriter.WriteLine("");
-        
+
         Assert.That(defaultSourceWriter.ToString(), Is.EqualTo("\t\n"));
     }
 
@@ -63,13 +63,13 @@ public class DefaultSourceWriterTest
     public void TestCloseBlock()
     {
         var defaultSourceWriter = new DefaultSourceWriter(new DefaultSourceWriterSettings(
-            UseSpacesForTabs: false, NewlineBeforeBlock: true));
+            false, NewlineBeforeBlock: true));
         defaultSourceWriter.OpenBlock("");
         defaultSourceWriter.CloseBlock("");
 
         Assert.That(defaultSourceWriter.ToString(), Is.EqualTo("\n{\n\t\n}\n"));
     }
-    
+
     [Test]
     public void TestCloseBlockWhenInvalid()
     {

@@ -1,25 +1,26 @@
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace CommandLineGenerator.SourceWriter;
+namespace CommandLineGenerator.Writer;
 
-public class DefaultSourceWriter(DefaultSourceWriterSettings defaultSourceWriterSettings): ISourceWriter
+/// <summary>
+///     Default source writer implementation.
+/// </summary>
+/// <param name="defaultSourceWriterSettings">Settings to use for writing</param>
+public class DefaultSourceWriter(DefaultSourceWriterSettings defaultSourceWriterSettings) : ISourceWriter
 {
+    private readonly string indentationPrefix = CreateIndentationPrefix(defaultSourceWriterSettings);
     private readonly StringBuilder sourceStringBuilder = new();
     private int currentIndentationLevel;
-    private readonly string indentationPrefix = CreateIndentationPrefix(defaultSourceWriterSettings);
-    
+
     public void OpenBlock(string openingString)
     {
         var openingStringLine = openingString +
                                 (defaultSourceWriterSettings.NewlineBeforeBlock ? "" : '{');
         WriteLine(openingStringLine);
 
-        if (defaultSourceWriterSettings.NewlineBeforeBlock)
-        {
-            WriteLine('{'.ToString());
-        }
-        
+        if (defaultSourceWriterSettings.NewlineBeforeBlock) WriteLine('{'.ToString());
+
         Indent();
     }
 
@@ -37,9 +38,7 @@ public class DefaultSourceWriter(DefaultSourceWriterSettings defaultSourceWriter
     public void Unindent()
     {
         if (currentIndentationLevel == 0)
-        {
             throw new InvalidOperationException("Cannot unindent when the current indentation value is zero valued.");
-        }
 
         currentIndentationLevel -= 1;
     }
@@ -47,10 +46,8 @@ public class DefaultSourceWriter(DefaultSourceWriterSettings defaultSourceWriter
     public void CloseBlock(string closingString)
     {
         if (currentIndentationLevel == 0)
-        {
             throw new InvalidOperationException("Cannot close block, mismatch between blocks opened and closed found");
-        }
-        
+
         WriteLine(closingString);
         Unindent();
         WriteLine("}");
@@ -62,9 +59,10 @@ public class DefaultSourceWriter(DefaultSourceWriterSettings defaultSourceWriter
             Enumerable.Repeat(
                 indentationPrefix,
                 currentIndentationLevel
-                )
-            );
+            )
+        );
     }
+
     private static string CreateIndentationPrefix(DefaultSourceWriterSettings defaultSourceWriterSettings)
     {
         return defaultSourceWriterSettings.UseSpacesForTabs

@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using CommandLineGenerator.ComponentGenerator.Static;
 using CommandLineGenerator.ComponentGenerator.Static.Model;
-using CommandLineGenerator.SourceWriter;
+using CommandLineGenerator.Writer;
 using Moq;
 
 namespace CommandLineGenerator.Testing.ComponentGenerator.Static;
@@ -17,11 +17,11 @@ public class CommandHandlerWriterTest
             ImmutableList<CommandConfigNode>.Empty.ToList());
 
         var mockSourceWriter = new Mock<ISourceWriter>();
-        
+
         var commandHandlerWriter = new CommandHandlerWriter(mockSourceWriter.Object);
-        
+
         commandHandlerWriter.AddHandler(commandConfig);
-        
+
         mockSourceWriter.Verify(writer => writer.WriteLine(It.IsAny<string>()), Times.AtLeast(3));
         mockSourceWriter.Verify(writer => writer.Indent(), Times.Exactly(1));
         mockSourceWriter.Verify(writer => writer.Unindent(), Times.Exactly(1));

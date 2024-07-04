@@ -1,11 +1,15 @@
 using System.CommandLine;
 using CommandLineGenerator.ComponentGenerator.Static.Model;
-using CommandLineGenerator.Extensions;
-using CommandLineGenerator.SourceWriter;
+using CommandLineGenerator.Utility;
+using CommandLineGenerator.Writer;
 
 namespace CommandLineGenerator.ComponentGenerator.Static;
 
-public class ConfigSourceVisitor(ISourceWriter sourceWriter): IConfigVisitor
+/// <summary>
+///     Configuration visitor to use for writing source code.
+/// </summary>
+/// <param name="sourceWriter">Source writer to use</param>
+public class ConfigSourceVisitor(ISourceWriter sourceWriter) : IConfigVisitor
 {
     public void Visit(RootCommandConfigNode rootCommandConfigNode)
     {
@@ -49,10 +53,8 @@ public class ConfigSourceVisitor(ISourceWriter sourceWriter): IConfigVisitor
         sourceWriter.WriteLine(
             $"{argumentConfigNode.Name}Argument.Arity = new {ArgumentArityConstructor(argumentConfigNode.Arity)};");
         if (argumentConfigNode.DefaultValue != null)
-        {
             sourceWriter.WriteLine(
                 $"{argumentConfigNode.Name}Argument.SetDefaultValue({argumentConfigNode.DefaultValue.ToLiteral()});");
-        }
     }
 
     private static string ArgumentArityConstructor(ArgumentArity argumentArity)

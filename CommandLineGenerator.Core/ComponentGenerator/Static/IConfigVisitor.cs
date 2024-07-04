@@ -2,6 +2,9 @@ using CommandLineGenerator.ComponentGenerator.Static.Model;
 
 namespace CommandLineGenerator.ComponentGenerator.Static;
 
+/// <summary>
+///     Visitor interface for configuration types.
+/// </summary>
 public interface IConfigVisitor
 {
     public void Visit(RootCommandConfigNode rootCommandConfigNode);

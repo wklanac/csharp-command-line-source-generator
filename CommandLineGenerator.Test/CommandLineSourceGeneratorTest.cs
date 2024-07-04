@@ -1,5 +1,4 @@
 using System.Text;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 
@@ -96,12 +95,11 @@ public class CommandLineSourceGeneratorTest
                 {
                     (typeof(CommandLineSourceGenerator),
                         "Program.g.cs",
-                        SourceText.From(generated, Encoding.UTF8)),
-                },
+                        SourceText.From(generated, Encoding.UTF8))
+                }
             },
             ReferenceAssemblies = ReferenceAssemblies.Default
                 .AddPackages([new PackageIdentity("System.CommandLine", "2.0.0-beta4.22272.1")])
-            
         }.RunAsync();
     }
 }

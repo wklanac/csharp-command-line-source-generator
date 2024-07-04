@@ -1,17 +1,20 @@
-﻿using System.CommandLine;
-using CommandLineGenerator.ComponentGenerator.Static;
+﻿using CommandLineGenerator.ComponentGenerator.Static;
 using CommandLineGenerator.ComponentGenerator.Static.Model;
-using CommandLineGenerator.SourceWriter;
+using CommandLineGenerator.Writer;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 
 namespace CommandLineGenerator;
 
-using Microsoft.CodeAnalysis;
-
+/// <summary>
+///     Source generation entrypoint for this project.
+///     This generator takes a JSON format configuration file and partial CLI program class as inputs, and
+///     produces boilerplate code and handler wiring code for the .NET CommandLine APIs.
+/// </summary>
 [Generator]
 public class CommandLineSourceGenerator : ISourceGenerator
 {
-    public void Initialize(GeneratorInitializationContext context) 
+    public void Initialize(GeneratorInitializationContext context)
     {
         // No initialization required for this generator
     }
@@ -21,17 +24,12 @@ public class CommandLineSourceGenerator : ISourceGenerator
         // Read JSON Configuration and raise exceptions for null output failure modes
         var configText = context.AdditionalFiles.FirstOrDefault(f => f.Path.EndsWith("commands"))?.GetText();
         if (configText == null)
-        {
             throw new ArgumentException("Cannot find a 'commands.json' file to use in the source generator context.");
-        }
 
         var config = JsonConvert.DeserializeObject<RootCommandConfigNode>(configText.ToString());
-             
-        if (config == null)
-        {
-            throw new Exception("Unknown error occurred during command configuration deserialization.");
-        }
-        
+
+        if (config == null) throw new Exception("Unknown error occurred during command configuration deserialization.");
+
         // Find the most likely namespace for the Program type symbol to exist in given the default
         // CLI .NET project structure
         var likelyProgramTypeNamespace =
@@ -40,7 +38,7 @@ public class CommandLineSourceGenerator : ISourceGenerator
                 .First()
                 .ContainingNamespace
                 .Name;
-        
+
         // Create source writer and establish file head contents
         var sourceWriter = new DefaultSourceWriter(new DefaultSourceWriterSettings());
         sourceWriter.WriteLine($"namespace {likelyProgramTypeNamespace};");
@@ -50,28 +48,24 @@ public class CommandLineSourceGenerator : ISourceGenerator
         sourceWriter.WriteLine("");
         sourceWriter.OpenBlock("public partial class Program");
         sourceWriter.OpenBlock("public async static Task<int> InvokeFrontend(string[] args)");
-        
+
         // Iterate over root command and visit each configuration node with a source visitor,
         // tracking relationships along the way
         var statefulConfigTree = new StatefulConfigTree<ICommandLineConfigNode>(config);
         var configSourceVisitor = new ConfigSourceVisitor(sourceWriter);
         var commandConfigRelationships = new List<ICommandLineConfigRelationship>();
         var commandsToWriteHandlersFor = new List<CommandConfigNode>();
-        
+
         foreach (var configNode in statefulConfigTree)
         {
             configNode.Accept(configSourceVisitor);
             if (configNode is CommandConfigNode knownCommand && statefulConfigTree.ParentsTracked > 0)
-            {
                 commandsToWriteHandlersFor.Add(knownCommand);
-            }
-            
+
             if (configNode is not IChildConfig<CommandConfigNode> knownChild
                 || statefulConfigTree.ParentsTracked == 0)
-            {
                 continue;
-            }
-            
+
             var mostRecentParent = statefulConfigTree.MostRecentParent;
             var relationship = knownChild.GetParentRelationship((CommandConfigNode)mostRecentParent);
             commandConfigRelationships.Add(relationship);
@@ -81,20 +75,19 @@ public class CommandLineSourceGenerator : ISourceGenerator
         var configRelationshipSourceVisitor = new ConfigRelationshipSourceVisitor(sourceWriter);
         commandConfigRelationships.ForEach(
             ccr => ccr.Accept(configRelationshipSourceVisitor));
-        
+
         // Iterate over known commands to establish handlers
         var commandHandlerWriter = new CommandHandlerWriter(sourceWriter);
         commandsToWriteHandlersFor.ForEach(c => commandHandlerWriter.AddHandler(c));
-        
+
         // Invoke root command before closing blocks
         sourceWriter.WriteLine("return await rootCommand.InvokeAsync(args);");
-        
+
         // Close method and partial class definition
         sourceWriter.CloseBlock("");
         sourceWriter.CloseBlock("");
-        
+
         // Add source file from source writer contents
         context.AddSource("Program.g.cs", sourceWriter.ToString());
     }
-    
 }

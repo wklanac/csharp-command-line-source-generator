@@ -1,9 +1,13 @@
 using CommandLineGenerator.ComponentGenerator.Static.Model;
-using CommandLineGenerator.SourceWriter;
+using CommandLineGenerator.Writer;
 
 namespace CommandLineGenerator.ComponentGenerator.Static;
 
-public class ConfigRelationshipSourceVisitor(ISourceWriter sourceWriter): IConfigRelationshipVisitor
+/// <summary>
+///     Visitor implementation to generate source code for configuration relationships.
+/// </summary>
+/// <param name="sourceWriter">Source writer to use</param>
+public class ConfigRelationshipSourceVisitor(ISourceWriter sourceWriter) : IConfigRelationshipVisitor
 {
     public void Visit(CommandSubcommandRelationship commandSubcommandRelationship)
     {

@@ -1,5 +1,8 @@
 namespace CommandLineGenerator.ComponentGenerator.Static.Model;
 
+/// <summary>
+///     Relationship where the command is a parent of an argument child
+/// </summary>
 public record CommandArgumentRelationship : ICommandLineConfigRelationship
 {
     public CommandArgumentRelationship(CommandConfigNode Parent, ArgumentConfigNode Child)
@@ -7,7 +10,7 @@ public record CommandArgumentRelationship : ICommandLineConfigRelationship
         this.Parent = Parent;
         this.Child = Child;
     }
-    
+
     public ICommandLineConfig Parent { get; }
     public ICommandLineConfig Child { get; }
 

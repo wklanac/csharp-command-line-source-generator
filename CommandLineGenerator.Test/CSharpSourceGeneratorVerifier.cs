@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 
+namespace CommandLineGenerator.Testing;
+
 public static class CSharpSourceGeneratorVerifier<TSourceGenerator>
     where TSourceGenerator : ISourceGenerator, new()
 {
@@ -11,9 +13,7 @@ public static class CSharpSourceGeneratorVerifier<TSourceGenerator>
     public class Test : CSharpSourceGeneratorTest<TSourceGenerator, NUnitVerifier>
 #pragma warning restore CS0618 // Type or member is obsolete
     {
-        public Test()
-        {
-        }
+        public LanguageVersion LanguageVersion { get; set; } = LanguageVersion.Default;
 
         protected override CompilationOptions CreateCompilationOptions()
         {
@@ -22,12 +22,11 @@ public static class CSharpSourceGeneratorVerifier<TSourceGenerator>
                 compilationOptions.SpecificDiagnosticOptions.SetItems(GetNullableWarningsFromCompiler()));
         }
 
-        public LanguageVersion LanguageVersion { get; set; } = LanguageVersion.Default;
-
         private static ImmutableDictionary<string, ReportDiagnostic> GetNullableWarningsFromCompiler()
         {
             string[] args = { "/warnaserror:nullable" };
-            var commandLineArguments = CSharpCommandLineParser.Default.Parse(args, baseDirectory: Environment.CurrentDirectory, sdkDirectory: Environment.CurrentDirectory);
+            var commandLineArguments =
+                CSharpCommandLineParser.Default.Parse(args, Environment.CurrentDirectory, Environment.CurrentDirectory);
             var nullableWarnings = commandLineArguments.CompilationOptions.SpecificDiagnosticOptions;
 
             return nullableWarnings;
