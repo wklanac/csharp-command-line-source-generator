@@ -5,7 +5,7 @@ This project implements boilerplate [C# source code generation](https://learn.mi
 ### Design
 The source generator deserializes the configuration file to a tree structure and then performs a pre-order traversal, visiting each configuration node to generate source code along the way. As it does this, it maintains knowledge of the relationships between each node, and a collection of each command used. It then traverses the relationships to produce parent-child wiring source code, and then finally the flattened command collection to produce handler wiring code.
 
-The code generated above is inserted into a partial class implementation which corresponds to an expected existing
+The code generated above is inserted into a partial class implementation which corresponds to an expected existing CLI program class.
 ## Features
 The following is produced by the source generator:
 * Creational code supporting the following inputs for each of these entity types:
